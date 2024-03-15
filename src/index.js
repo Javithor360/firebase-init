@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, doc, addDoc, deleteDoc, onSnapshot } from "firebase/firestore";
+import { getFirestore, collection, getDocs, doc, addDoc, deleteDoc, onSnapshot, query, where } from "firebase/firestore";
 
 // Personal firebase credentials to connect to the database
 const firebaseConfig = {
@@ -20,8 +20,11 @@ const db = getFirestore();
 // collection reference
 const colRef = collection(db, "books"); // here we have to specify the collection we want to target
 
+// queries
+const q = query(colRef, where("author", "==", "Manlio Argueta")); // query function to use queries and we also utilise the where function to specify the parameters we wanna get
+
 // real time collection data
-onSnapshot(colRef, (snapshot) => { // onSnapshot function executes everytime a new action is made in the database, it works like a listener
+onSnapshot(q, (snapshot) => { // onSnapshot function executes everytime a new action is made in the database, it works like a listener
     let books = [];
     snapshot.docs.forEach((doc) => { // for each entry we push a new element into the array just with the information we need
         books.push({ id: doc.id, ...doc.data() });
